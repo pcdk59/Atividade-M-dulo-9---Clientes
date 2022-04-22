@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,20 +21,19 @@ public class Cadastro extends Clientes implements Autentica{
     }
 
     public void lista() {
-        List<Clientes> MaisComprados = lista.stream().filter(c -> c.getCompras() >= 20).collect(Collectors.toList());
-        System.out.println("-----------------------------");
-        MaisComprados.forEach(c -> System.out
-                .println("Maiores compradores: " + c.getNome() + " | Quantidade de compras: " + c.getCompras()));
+        Comparator<Clientes> comparatorMais = Comparator.comparing(Clientes::getCompras);
+        List<Clientes> MaisComprados = lista.stream().max(comparatorMais).stream().toList();
+        System.out.println(MaisComprados);
 
-        List<Clientes> MenosComprados = lista.stream().filter(c -> c.getCompras() <= 19).collect(Collectors.toList());
-        MenosComprados.forEach(c -> System.out
-                .println("Menores compradores: " + c.getNome() + " | Quantidade de compras: " + c.getCompras()));
+        Comparator<Clientes> comparatorMenos = Comparator.comparing(Clientes::getCompras);
+        List<Clientes> MenosComprados = lista.stream().min(comparatorMenos).stream().toList();
+        System.out.println(MenosComprados);
 
     }
 
     public void media() {
-        double soma = lista.stream().mapToDouble(c -> c.getCompras()).sum();
-        System.out.println(soma / lista.size());
+        double media = lista.stream().mapToDouble(Clientes::getCompras).average().getAsDouble();
+        System.out.println(media);
 
     }
 
